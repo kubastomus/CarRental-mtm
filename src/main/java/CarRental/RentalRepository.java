@@ -1,42 +1,14 @@
 package CarRental;
 
-import ConnectionTest.HibernateUtil;
-import org.hibernate.SessionFactory;
-
-import javax.persistence.EntityManager;
 import javax.persistence.Query;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Main {
+import static CarRental.RentalApp.em;
 
-    public static SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-    public static EntityManager em = sessionFactory.createEntityManager();
+public class RentalRepository {
 
-
-    public static void main(String[] args) {
-
-
-        // odniesienie do metod dane początkowe, dodawanie, usuwanie, edycja, rozliczanie wypożyczeń, itd
-        loadInitialData();
-
-        addUser("Jan", "Kowal");
-        addCar("Lamborghini", "Aventador", "Greey", "PO KING1", 500, true);
-        addCar("Porsche", "Panamera S", "Silver", "PZ 02546", 450, true);
-        addCar("Dodge", "Challenger", "Red", "PZ DODGE", 550, true);
-//        deleteCar(6);
-//        deleteUser(5);
-        increaseEndPeriod(1, 0, 20);
-        finishPeriodAndSummary(2, false,1000, 400, 1);
-
-        addPeriod(33, 2,0, 5, 8);
-        addPeriod(44, 3, 0, 6, 7);
-
-        // this write your CarRenatal code ;)
-
-
-        HibernateUtil.shutdown();
-    }
 
     public static void loadInitialData(){
 
@@ -95,7 +67,22 @@ public class Main {
         em.getTransaction().commit();
     }
 
-    public static void deleteUser(int rowsDelete){
+    public static void deleteUser(String nameUser, String surnameUser){
+
+        em.getTransaction().begin();
+
+        Query queryName = em.createQuery("delete from User u where u.name=:name");
+        queryName.setParameter("name", nameUser);
+        Query querySurname = em.createQuery("delete from User u where u.surname=:surname");
+        querySurname.setParameter("surname", surnameUser);
+        queryName.executeUpdate();
+        querySurname.executeUpdate();
+        System.out.println("Deleted user of value Id: " + nameUser + " " + surnameUser);
+
+        em.getTransaction().commit();
+    }
+
+    public static void deleteUserFromId(int rowsDelete){
 
         em.getTransaction().begin();
 
@@ -198,7 +185,7 @@ public class Main {
         em.getTransaction().commit();
     }
 
-    public static void finishPeriodAndSummary(int userId, boolean forEndIsEfficiently, double punishForDamage, double punishForDelay, int carId){
+    public static void finishPeriodAndSummary(int userId, double punishForDamage, double punishForDelay, int periodId,  boolean forEndIsEfficiently){
 
         em.getTransaction().begin();
 
@@ -226,12 +213,14 @@ public class Main {
 
             // zakończenie wypożyczenia
             Query query = em.createQuery("delete from CarRental where id=:id");
-            query.setParameter("id", carId);
+            query.setParameter("id", periodId);
             int rowsDelete = query.executeUpdate();
-            System.out.println("Deleted period of value Id: " + rowsDelete);
+            System.out.println("Deleted period of value Id: " + periodId);
         }
 
         em.getTransaction().commit();
     }
+
+
 
 }
