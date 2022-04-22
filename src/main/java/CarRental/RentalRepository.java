@@ -77,7 +77,7 @@ public class RentalRepository {
         querySurname.setParameter("surname", surnameUser);
         queryName.executeUpdate();
         querySurname.executeUpdate();
-        System.out.println("Deleted user of value Id: " + nameUser + " " + surnameUser);
+        System.out.println("Deleted user of name and surname: " + nameUser + " " + surnameUser);
 
         em.getTransaction().commit();
     }
