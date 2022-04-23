@@ -67,20 +67,20 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void deleteUser(String nameUser, String surnameUser){
-
-        em.getTransaction().begin();
-
-        Query queryName = em.createQuery("delete from User u where u.name=:name");
-        queryName.setParameter("name", nameUser);
-        Query querySurname = em.createQuery("delete from User u where u.surname=:surname");
-        querySurname.setParameter("surname", surnameUser);
-        queryName.executeUpdate();
-        querySurname.executeUpdate();
-        System.out.println("Deleted user of name and surname: " + nameUser + " " + surnameUser);
-
-        em.getTransaction().commit();
-    }
+//    public static void deleteUser(String nameUser, String surnameUser){  // do poprawki najlepiej byłoby zrobić pesel usera
+//
+//        em.getTransaction().begin();
+//
+//        Query queryName = em.createQuery("delete from User u where u.name=:name");
+//        queryName.setParameter("name", nameUser);
+//        Query querySurname = em.createQuery("delete from User u where u.surname=:surname");
+//        querySurname.setParameter("surname", surnameUser);
+//        queryName.executeUpdate();
+//        querySurname.executeUpdate();
+//        System.out.println("Deleted user of name and surname: " + nameUser + " " + surnameUser);
+//
+//        em.getTransaction().commit();
+//    }
 
     public static void deleteUserFromId(int rowsDelete){
 
@@ -145,7 +145,7 @@ public class RentalRepository {
         List<Car> carList = queryCar.getResultList();
 
         // na podstawie rozmiaru powyższych list (czy wybrany Car jest wypożyczony, lub jest w bazie Car) ustawiam warunek nowego wypożyczenia
-        if (resultAllCar.size() > 0 || carList.size() == 0 || (carList.size() > 0 && carList.get(0).isEfficient() == false)){
+        if (userList.size() == 0 || resultAllCar.size() > 0 || carList.size() == 0 || (carList.size() > 0 && carList.get(0).isEfficient() == false)){
             System.out.println("The selected car is currently rented or unavailable !!!");
         } else {
             CarRental period = new CarRental();
@@ -185,7 +185,7 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void finishPeriodAndSummary(int userId, double punishForDamage, double punishForDelay, int periodId,  boolean forEndIsEfficiently){
+    public static void finishPeriodAndSummary(int userId, boolean forEndIsEfficiently, double punishForDamage, double punishForDelay, int periodId){
 
         em.getTransaction().begin();
 
@@ -211,6 +211,7 @@ public class RentalRepository {
 
             System.out.println("The total amount of: " + (t.getPunishment().doubleValue() + t.getCar().getPrice().doubleValue()));
 
+
             // zakończenie wypożyczenia
             Query query = em.createQuery("delete from CarRental where id=:id");
             query.setParameter("id", periodId);
@@ -220,7 +221,6 @@ public class RentalRepository {
 
         em.getTransaction().commit();
     }
-
 
 
 }

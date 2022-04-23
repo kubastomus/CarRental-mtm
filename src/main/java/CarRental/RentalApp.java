@@ -28,15 +28,16 @@ public class RentalApp {
 //        RentalRepository.deleteCar(6);
 //        RentalRepository.deleteUserFromId(5);
         RentalRepository.increaseEndPeriod(1, 0, 20);
-        RentalRepository.finishPeriodAndSummary(2,1000, 400, 1, false);
+        RentalRepository.finishPeriodAndSummary(2, false, 1000, 400, 1);
 
         RentalRepository.addPeriod(33, 2,0, 5, 8);
         RentalRepository.addPeriod(44, 3, 0, 6, 7);
 
+
         // this write your CarRenatal code ;)
 
-//        RentalRepository.finishPeriodAndSummary(6, 0, 0, 4, true);
-
+//        RentalRepository.finishPeriodAndSummary(6, false, 5000, 0, 4);
+//        RentalRepository.finishPeriodAndSummary(5, false, 10000, 0, 3);
 
 
 //        HibernateUtil.shutdown();     // przeniesione na koniec z uwagi na scanner
@@ -45,17 +46,18 @@ public class RentalApp {
         Scanner scanner = new Scanner(System.in);
         boolean isWorking = true;
 
+
         while (isWorking) {
             System.out.printf("Enter an option:\n" +
-                    "End App - %30s\n" +
-                    "Add new User - %25s\n" +
-                    "Delete User - %26s\n" +
-                    "Delete User from Id - %18s\n" +
-                    "Add new Car - %26s\n" +
-                    "Delete Car - %27s\n" +
-                    "Add new Period - %23s\n" +
-                    "Increase time rental - %17s\n" +
-                    "Finish Period and summary - %10s\n",
+                            "End App - %30s\n" +
+                            "Add new User - %25s\n" +
+                            "Delete User - %26s\n" +
+                            "Delete User from Id - %18s\n" +
+                            "Add new Car - %26s\n" +
+                            "Delete Car - %27s\n" +
+                            "Add new Period - %23s\n" +
+                            "Increase time rental - %17s\n" +
+                            "Finish Period and summary - %10s\n",
                     "exit", "addUser", "delUser", "delUserFromId",
                     "addCar", "delCar", "addPeriod", "incEndPeriod", "finishPeriod");
 
@@ -69,10 +71,10 @@ public class RentalApp {
                     System.out.println("Enter Name and Surname");
                     rentalRepository.addUser(scanner.next(),(scanner.next()));
                     break;
-                case "delUser":
-                    System.out.println("Enter Name and Surname");
-                    rentalRepository.deleteUser(scanner.next(),(scanner.next()));
-                    break;
+//                case "delUser":
+//                    System.out.println("Enter Name and Surname");
+//                    rentalRepository.deleteUser(scanner.next(),(scanner.next()));
+//                    break;
                 case "delUserFromId":
                     System.out.println("Enter Id (value)");
                     rentalRepository.deleteUserFromId(scanner.nextInt());
@@ -80,7 +82,7 @@ public class RentalApp {
                 case "addCar":
                     System.out.println("Enter for Car: Brand, Model, color, regNr, price, efficientValue(boolean)");
                     rentalRepository.addCar(scanner.next(),scanner.next(),scanner.next(),(scanner.next() + " " + scanner.next()),
-                            scanner.nextDouble(), scanner.hasNextBoolean());
+                            scanner.nextDouble(), scanner.nextBoolean());
                     break;
                 case "delCar":
                     System.out.println("Enter: Id (value)");
@@ -92,8 +94,8 @@ public class RentalApp {
                     System.out.println("Enter: selectUserId, addHour, addMinut");
                     rentalRepository.increaseEndPeriod(scanner.nextInt(),scanner.nextInt(),scanner.nextInt());
                 case "finishPeriod":
-                    System.out.println("Enter: userId, punishForDamage, punishForDelay, periodId, forEndIsEfficiently(boolean)");
-                    rentalRepository.finishPeriodAndSummary(scanner.nextInt(),scanner.nextDouble(),scanner.nextDouble(),scanner.nextInt(),scanner.hasNextBoolean());
+                    System.out.println("Enter: userId, forEndIsEfficiently(boolean), punishForDamage, punishForDelay, periodId");
+                    rentalRepository.finishPeriodAndSummary(scanner.nextInt(),scanner.nextBoolean(),scanner.nextDouble(),scanner.nextDouble(),scanner.nextInt());
 
                 default:
                     System.out.println("Options not recognized");
