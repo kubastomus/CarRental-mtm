@@ -87,15 +87,19 @@ public class RentalApp {
                 case "delCar":
                     System.out.println("Enter: Id (value)");
                     rentalRepository.deleteCar(scanner.nextInt());
+                    break;
                 case "addPeriod":
                     System.out.println("Enter: punishment, valueHours, valueMinutes, valueUserId, valueCarId");
                     rentalRepository.addPeriod(scanner.nextDouble(),scanner.nextInt(),scanner.nextInt(),scanner.nextInt(),scanner.nextInt());
+                    break;
                 case "incEndPeriod":
                     System.out.println("Enter: selectUserId, addHour, addMinut");
                     rentalRepository.increaseEndPeriod(scanner.nextInt(),scanner.nextInt(),scanner.nextInt());
+                    break;
                 case "finishPeriod":
                     System.out.println("Enter: userId, forEndIsEfficiently(boolean), punishForDamage, punishForDelay, periodId");
                     rentalRepository.finishPeriodAndSummary(scanner.nextInt(),scanner.nextBoolean(),scanner.nextDouble(),scanner.nextDouble(),scanner.nextInt());
+                    break;
 
                 default:
                     System.out.println("Options not recognized");
