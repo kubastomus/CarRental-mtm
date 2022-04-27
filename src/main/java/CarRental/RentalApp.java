@@ -46,7 +46,6 @@ public class RentalApp {
         Scanner scanner = new Scanner(System.in);
         boolean isWorking = true;
 
-
         while (isWorking) {
             System.out.printf("Enter an option:\n" +
                             "End App - %30s\n" +
@@ -90,7 +89,7 @@ public class RentalApp {
                     break;
                 case "addPeriod":
                     System.out.println("Enter: punishment, valueHours, valueMinutes, valueUserId, valueCarId");
-                    rentalRepository.addPeriod(scanner.nextDouble(),scanner.nextInt(),scanner.nextInt(),scanner.nextInt(),scanner.nextInt());
+                    rentalRepository.addPeriod(scanner.nextDouble(),scanner.nextInt(), scanner.nextInt(),scanner.nextInt(),scanner.nextInt());
                     break;
                 case "incEndPeriod":
                     System.out.println("Enter: selectUserId, addHour, addMinut");

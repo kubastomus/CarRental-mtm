@@ -2,6 +2,7 @@ package CarRental;
 
 import javax.persistence.Query;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class RentalRepository {
                 LocalDateTime.of(2022, 04, 11, 21, 00),
                 LocalDateTime.of(2022, 04, 11, 23, 30), user1, car2);
 
+        ProfitSum profitStart = new ProfitSum(0);
+
 
         em.persist(car1);
         em.persist(car2);
@@ -48,10 +51,10 @@ public class RentalRepository {
         em.persist(user3);
         em.persist(user4);
         em.persist(user5);
+        em.persist(profitStart);
 
 
         em.getTransaction().commit();
-
     }
 
     public static void addUser(String name, String surname){
@@ -195,11 +198,14 @@ public class RentalRepository {
                 .setParameter("id", userId)
                 .getResultList();
 
-        // ustawiamy jaki jest stan auta przy odbiorze i uwzględniamy wysokość kary
+        // ustawiamy dla danego wypożyczenia jaki jest stan auta przy odbiorze i uwzględniamy wysokość kary,
+        // WAŻNE ograniczamy się do danego wypożyczenia (nawet jeśli klient ma ich więcej), bo tu ma być kara i zmiana auta na false
         for(CarRental eff: periodTimeActual){
-            eff.getCar().setEfficient(forEndIsEfficiently);
-            if(eff.getCar().isEfficient() == false){
-                eff.setPunishment(eff.getPunishment().doubleValue() + punishForDamage);
+            if(eff.getId() == periodId) {
+                eff.getCar().setEfficient(forEndIsEfficiently);
+                if (eff.getCar().isEfficient() == false) {
+                    eff.setPunishment(eff.getPunishment().doubleValue() + punishForDamage);
+                }
             }
         }
 
@@ -211,16 +217,28 @@ public class RentalRepository {
 
             System.out.println("The total amount of: " + (t.getPunishment().doubleValue() + t.getCar().getPrice().doubleValue()));
 
-
             // zakończenie wypożyczenia
-            Query query = em.createQuery("delete from CarRental where id=:id");
+            Query query = em.createQuery("delete from CarRental where id=:id");// zamiana z 246
             query.setParameter("id", periodId);
             int rowsDelete = query.executeUpdate();
             System.out.println("Deleted period of value Id: " + periodId);
+
+
+            // aktualizujemy i wyświetlamy aktualny dochód wypożyczalni
+            double periodCost = (t.getPunishment().doubleValue() + t.getCar().getPrice().doubleValue());
+
+            Query earlierProfit = em.createQuery("from ProfitSum as p where p.id=:id");
+            earlierProfit.setParameter("id", 1);
+            List<ProfitSum> profitSumList = earlierProfit.getResultList();
+
+            for (ProfitSum p: profitSumList){
+                p.setProfit(p.getProfit().doubleValue() + periodCost);
+                System.out.println("The company's current profit is: " + p.getProfit());
+            }
+
         }
 
         em.getTransaction().commit();
     }
-
 
 }
