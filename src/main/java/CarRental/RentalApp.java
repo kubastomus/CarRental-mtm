@@ -28,7 +28,7 @@ public class RentalApp {
 //        RentalRepository.deleteCar(6);
 //        RentalRepository.deleteUserFromId(5);
         RentalRepository.increaseEndPeriod(1, 0, 20);
-        RentalRepository.finishPeriodAndSummary(2, false, 1000, 400, 1);
+//        RentalRepository.finishPeriodAndSummary(1, false, 1000, 400);
 
         RentalRepository.addPeriod(33, 2,0, 5, 8);
         RentalRepository.addPeriod(44, 3, 0, 6, 7);
@@ -36,8 +36,8 @@ public class RentalApp {
 
         // this write your CarRenatal code ;)
 
-//        RentalRepository.finishPeriodAndSummary(6, false, 5000, 0, 4);
-//        RentalRepository.finishPeriodAndSummary(5, false, 10000, 0, 3);
+//        RentalRepository.finishPeriodAndSummary(4, false, 5000, 0);
+//        RentalRepository.finishPeriodAndSummary(3, false, 10000, 0);
 
 
 //        HibernateUtil.shutdown();     // przeniesione na koniec z uwagi na scanner
@@ -96,8 +96,8 @@ public class RentalApp {
                     rentalRepository.increaseEndPeriod(scanner.nextInt(),scanner.nextInt(),scanner.nextInt());
                     break;
                 case "finishPeriod":
-                    System.out.println("Enter: userId, forEndIsEfficiently(boolean), punishForDamage, punishForDelay, periodId");
-                    rentalRepository.finishPeriodAndSummary(scanner.nextInt(),scanner.nextBoolean(),scanner.nextDouble(),scanner.nextDouble(),scanner.nextInt());
+                    System.out.println("Enter: periodId, forEndIsEfficiently(boolean), punishForDamage, punishForDelay");
+                    rentalRepository.finishPeriodAndSummary(scanner.nextInt(),scanner.nextBoolean(),scanner.nextDouble(),scanner.nextDouble());
                     break;
 
                 default:

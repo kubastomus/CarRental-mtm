@@ -5,6 +5,7 @@ import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static CarRental.RentalApp.em;
 
@@ -29,12 +30,12 @@ public class RentalRepository {
         Car car5 = new Car("Lincoln", "MKZ", "Black", "PO 014CA", 320, true);
 
         CarRental period1 = new CarRental(200,
-                LocalDateTime.of(2022, 04, 13, 15, 00),
-                LocalDateTime.of(2022, 04, 13, 21, 10), user2, car1);
+                LocalDateTime.of(2022, 04, 14, 15, 00),
+                LocalDateTime.of(2022, 04, 14, 21, 10), user2, car1);
 
         CarRental period2 = new CarRental(0,
-                LocalDateTime.of(2022, 04, 11, 21, 00),
-                LocalDateTime.of(2022, 04, 11, 23, 30), user1, car2);
+                LocalDateTime.of(2022, 04, 20, 21, 00),
+                LocalDateTime.of(2022, 04, 20, 23, 30), user1, car2);
 
         ProfitSum profitStart = new ProfitSum(0);
 
@@ -188,44 +189,39 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void finishPeriodAndSummary(int userId, boolean forEndIsEfficiently, double punishForDamage, double punishForDelay, int periodId){
+    public static void finishPeriodAndSummary(int periodId, boolean forEndIsEfficiently, double punishForDamage, double punishForDelay){
 
         em.getTransaction().begin();
 
-        List<CarRental> periodTimeActual = em.createQuery("select r from CarRental r "
-                        + "join fetch r.user "
-                        + "where r.user.id =:id", CarRental.class)
-                .setParameter("id", userId)
-                .getResultList();
+        Query periodQuery = em.createQuery("from CarRental as r where r.id=:id");
+        periodQuery.setParameter("id", periodId);
+        List<CarRental> periodList = periodQuery.getResultList();
 
-        // ustawiamy dla danego wypożyczenia jaki jest stan auta przy odbiorze i uwzględniamy wysokość kary,
-        // WAŻNE ograniczamy się do danego wypożyczenia (nawet jeśli klient ma ich więcej), bo tu ma być kara i zmiana auta na false
-        for(CarRental eff: periodTimeActual){
-            if(eff.getId() == periodId) {
-                eff.getCar().setEfficient(forEndIsEfficiently);
-                if (eff.getCar().isEfficient() == false) {
-                    eff.setPunishment(eff.getPunishment().doubleValue() + punishForDamage);
+        // ustawiamy jaki jest stan auta przy odbiorze i uwzględniamy wysokość kary
+        for(CarRental eff: periodList){
+            eff.getCar().setEfficient(forEndIsEfficiently);
+            if (eff.getCar().isEfficient() == false) {
+                eff.setPunishment(eff.getPunishment().doubleValue() + punishForDamage);
                 }
-            }
         }
 
         // sprawdzamy, czy auto jest oddane na czas, jeśli nie to ustanawiamy karę za opóźnienie
-        for (CarRental t: periodTimeActual) {
+        for (CarRental t: periodList) {
             if (t.getEndPeriod().isBefore(LocalDateTime.now())) {
                 t.setPunishment(t.getPunishment().doubleValue() + punishForDelay);
             }
 
-            System.out.println("The total amount of: " + (t.getPunishment().doubleValue() + t.getCar().getPrice().doubleValue()));
+            double periodCost = t.getPunishment().doubleValue() + t.getCar().getPrice().doubleValue();
+            System.out.println("The total amount of: " + periodCost);
 
             // zakończenie wypożyczenia
-            Query query = em.createQuery("delete from CarRental where id=:id");// zamiana z 246
+            Query query = em.createQuery("delete from CarRental where id=:id");
             query.setParameter("id", periodId);
             int rowsDelete = query.executeUpdate();
             System.out.println("Deleted period of value Id: " + periodId);
 
 
             // aktualizujemy i wyświetlamy aktualny dochód wypożyczalni
-            double periodCost = (t.getPunishment().doubleValue() + t.getCar().getPrice().doubleValue());
 
             Query earlierProfit = em.createQuery("from ProfitSum as p where p.id=:id");
             earlierProfit.setParameter("id", 1);
