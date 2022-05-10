@@ -19,25 +19,25 @@ public class RentalApp {
 
         RentalRepository rentalRepository = new RentalRepository();
 
-        RentalRepository.loadInitialData();
+        rentalRepository.loadInitialData();
 
-        RentalRepository.addUser("Jan", "Kowal");
-        RentalRepository.addCar("Lamborghini", "Aventador", "Greey", "PO KING1", 500, true);
-        RentalRepository.addCar("Porsche", "Panamera S", "Silver", "PZ 02546", 450, true);
-        RentalRepository.addCar("Dodge", "Challenger", "Red", "PZ DODGE", 550, true);
-//        RentalRepository.deleteCar(6);
-//        RentalRepository.deleteUserFromId(5);
-        RentalRepository.increaseEndPeriod(1, 0, 20);
-//        RentalRepository.finishPeriodAndSummary(1, false, 1000, 400);
+        rentalRepository.addUser("Jan", "Kowal");
+        rentalRepository.addCar("Lamborghini", "Aventador", "Greey", "PO KING1", 500, true);
+        rentalRepository.addCar("Porsche", "Panamera S", "Silver", "PZ 02546", 450, true);
+        rentalRepository.addCar("Dodge", "Challenger", "Red", "PZ DODGE", 550, true);
+//        rentalRepository.deleteCar(6);
+//        rentalRepository.deleteUserFromId(5);
+        rentalRepository.increaseEndPeriod(1, 0, 20);
+//        rentalRepository.finishPeriodAndSummary(1, false, 1000, 400);
 
-        RentalRepository.addPeriod(33, 2,0, 5, 8);
-        RentalRepository.addPeriod(44, 3, 0, 6, 7);
+        rentalRepository.addPeriod(33, 2,0, 5, 8);
+        rentalRepository.addPeriod(44, 3, 0, 6, 7);
 
 
         // this write your CarRenatal code ;)
 
-//        RentalRepository.finishPeriodAndSummary(4, false, 5000, 0);
-//        RentalRepository.finishPeriodAndSummary(3, false, 10000, 0);
+//        rentalRepository.finishPeriodAndSummary(4, false, 5000, 0);
+//        rentalRepository.finishPeriodAndSummary(3, false, 10000, 0);
 
 
 //        HibernateUtil.shutdown();     // przeniesione na koniec z uwagi na scanner

@@ -12,7 +12,7 @@ import static CarRental.RentalApp.em;
 public class RentalRepository {
 
 
-    public static void loadInitialData(){
+    public void loadInitialData(){
 
         em.getTransaction().begin();
 
@@ -58,7 +58,7 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void addUser(String name, String surname){
+    public void addUser(String name, String surname){
 
         em.getTransaction().begin();
 
@@ -86,7 +86,7 @@ public class RentalRepository {
 //        em.getTransaction().commit();
 //    }
 
-    public static void deleteUserFromId(int rowsDelete){
+    public void deleteUserFromId(int rowsDelete){
 
         em.getTransaction().begin();
 
@@ -98,7 +98,7 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void addCar(String brand, String model, String color, String regNr, double price, boolean efficientValue){
+    public void addCar(String brand, String model, String color, String regNr, double price, boolean efficientValue){
 
         em.getTransaction().begin();
 
@@ -115,7 +115,7 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void deleteCar(int rowsDelete){
+    public void deleteCar(int rowsDelete){
 
         em.getTransaction().begin();
 
@@ -127,7 +127,7 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void addPeriod(double punishment, int valueHours, int valueMinutes, int valueUserId, int valueCarId){
+    public void addPeriod(double punishment, int valueHours, int valueMinutes, int valueUserId, int valueCarId){
 
         em.getTransaction().begin();
 
@@ -169,7 +169,7 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void increaseEndPeriod(int selectUserId, int addHour, int addMinut){
+    public void increaseEndPeriod(int selectUserId, int addHour, int addMinut){
 
         em.getTransaction().begin();
 
@@ -189,7 +189,7 @@ public class RentalRepository {
         em.getTransaction().commit();
     }
 
-    public static void finishPeriodAndSummary(int periodId, boolean forEndIsEfficiently, double punishForDamage, double punishForDelay){
+    public void finishPeriodAndSummary(int periodId, boolean forEndIsEfficiently, double punishForDamage, double punishForDelay){
 
         em.getTransaction().begin();
 
